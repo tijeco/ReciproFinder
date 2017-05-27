@@ -25,5 +25,5 @@ do
 done
 makeblastdb -in Sim_genomes.fasta -out Sim_genomes.fasta.seq.db -dbtype prot
 blastp -db Sim_genomes.fasta.seq.db -query Sim_genomes.fasta -outfmt 6 -out Sim_genomes.fasta.blastall -num_threads 13 -evalue 1E-5
-python ../ReciproFinder
+python ../ReciproFinder.py
 cd ..
