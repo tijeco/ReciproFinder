@@ -1,5 +1,5 @@
 $working_dir =  $(date|sed 's/ /_/g')
-
+echo $working_dir
 mkdir $working_dir
 
 # cd $working_dir
