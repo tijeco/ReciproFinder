@@ -1,5 +1,5 @@
 
-working_dir=$(date|sed 's/ /_/g')
+working_dir=$(date|sed 's/ /_/g'|sed 's/:/./g')
 echo $working_dir
 mkdir $working_dir
 
@@ -23,4 +23,6 @@ do
 	cat $f |sed "/^>/s/$/_$(dirname $f)/" >> Sim_genomes.fasta
 
 done
+makeblastdb -in Sim_genomes.fasta -out Sim_genomes.fasta.seq.db -dbtype prot
+blastp -db Sim_genomes.fasta.seq.db -query Sim_genomes.fasta -outfmt 6 -out Sim_genomes.fasta.blastall -num_threads 13 -evalue 1E-5
 cd ..
