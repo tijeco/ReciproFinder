@@ -22,5 +22,5 @@ for f in gene*/*pep_Unaligned.FASTA
 do
 	cat $working_dir/$f |sed "/^>/s/$/_$(basename $f)/" > Sim_genomes.fasta
 
-
+done
 cd ..
