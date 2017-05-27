@@ -21,9 +21,18 @@ with open("Sim_genomes.fasta.blastall") as f:
         for gene in pairDict[taxa].keys():
             for genePairTaxa in pairDict[taxa][gene]:
                 bestie =  pairDict[taxa][gene][genePairTaxa][0]
-                bestieOfBestie = pairDict[genePairTaxa][bestie][taxa][0]
-                if gene == bestieOfBestie:
-                    if min(bestie,gene) not in bestieDict:
-                        bestieDict[min(bestie,gene)] = max(bestie,gene)
-                    else:
-                        print(bestie, "and",gene,"are BFFs")
+                try:
+                    bestieOfBestie = pairDict[genePairTaxa][bestie][taxa][0]
+                    if gene == bestieOfBestie:
+                        if min(bestie,gene) not in bestieDict:
+                            bestieDict[min(bestie,gene)] = {max(bestie,gene):True}
+                        else:
+                            bestieDict[min(bestie,gene)][max(bestie,gene)] = True
+                            print(bestie, "and",gene,"are BFFs")
+                except:
+                    None
+    print(bestieDict)
+    print( bestieDict.keys())
+    for i in bestieDict.keys():
+        print(i)
+        print( len(bestieDict[i]))
