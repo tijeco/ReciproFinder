@@ -12,7 +12,7 @@ for f in gene*
 
 do
 	cd $f
-	/media/BigRAID/JeffTemp/EvolvAGene4Package/EvolveAGene4-linux-x86-64 -f $f -n 4 -o Phy -b 0.32
+	/media/BigRAID/JeffTemp/EvolvAGene4Package/EvolveAGene4-linux-x86-64 -f $f.fa -n 4 -o Phy -b 0.32
 	cd ..
 
 
