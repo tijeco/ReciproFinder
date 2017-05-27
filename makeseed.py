@@ -18,6 +18,6 @@ def randCodon():
 seq=""
 for i in range(100):
     seq+=randCodon()
-for i in range(4):
-    with open("gene"+str(1+i)+".fa","w") as out:
-        out.write("ATG"+seq+"TAA\n")
+
+with open("seed.fa","w") as out:
+    out.write("ATG"+seq+"TAA\n")
