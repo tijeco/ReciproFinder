@@ -10,7 +10,8 @@ python3 ../splitTogene.py
 for f in gene*fa
 do
 
-mkdir $f
+	mkdir $f
 
-donewnew
+done
+
 cd ..
