@@ -73,14 +73,14 @@ with open("Sim_genomes.fasta.blastall") as f:
                             print(bestie, "and",gene,"are BFFs")
                 except:
                     None
-    print(bestieDict)
-    print( bestieDict.keys())
+    # print(bestieDict)
+    # print( bestieDict.keys())
     for i in bestieDict.keys():
-        print("-------------")
-        print(genesUsedDict)
-        print("===============")
+        # print("-------------")
+        # print(genesUsedDict)
+        # print("===============")
         if i not in genesUsedDict:
-            keep_going = True
+            keep_going = True #NOTE potentially remove this, keeps first group regardless iff best, perhaps best to keep all and filter later.....
             for j in bestieDict[i].keys():
                 if j in genesUsedDict:
                     keep_going = False
