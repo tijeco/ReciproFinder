@@ -79,14 +79,14 @@ with open("Sim_genomes.fasta.blastall") as f:
         # print("-------------")
         # print(genesUsedDict)
         # print("===============")
-        if i not in genesUsedDict:
+        # if i not in genesUsedDict:
 
 
-            orthologs[number] = {}
-            orthologs[number]["genes"] ={}
+        orthologs[number] = {}
+        orthologs[number]["genes"] ={}
 
-            orthologs[number]["taxa"] ={}
-            checkPairs(bestieDict,bestieDict[i],i)
+        orthologs[number]["taxa"] ={}
+        checkPairs(bestieDict,bestieDict[i],i)
             # print(len(orthologs[number])-1,len(orthologs[number]["genes"]))
             # print(orthologs[number]["genes"])
         number+=1
