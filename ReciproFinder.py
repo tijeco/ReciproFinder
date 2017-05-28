@@ -86,13 +86,20 @@ with open("Sim_genomes.fasta.blastall") as f:
         orthologs[number]["genes"] ={}
 
         orthologs[number]["taxa"] ={}
-        checkPairs(bestieDict,bestieDict[i],i) 
+        checkPairs(bestieDict,bestieDict[i],i)
             # print(len(orthologs[number])-1,len(orthologs[number]["genes"]))
             # print(orthologs[number]["genes"])
         number+=1
         # print("@@@@@@@@@@@@@@@@@@@@@@")
     for i in orthologs.keys():
-        print(orthologs[i]["genes"])
+        # print(len(orthologs[i])-2)
+        taxa_completion = len(orthologs[i]["taxa"])/float(len(pairDict))
+        edge_count = 0
+        for j in orthologs[i]["genes"]:
+            edge_count+= orthologs[i]["genes"][j]
+        edge_completion =(edge_count/len(orthologs[i]["genes"])/3)
+        if edge_completion > 0.65 and taxa_completion > 0.75:
+            print(orthologs[i]["genes"])
     # for i in bestieDict.keys():
     #     print(i,bestieDict[i])
     # orthologs[number] = {}
