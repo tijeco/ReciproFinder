@@ -95,10 +95,13 @@ with open("Sim_genomes.fasta.blastall") as f:
         # print(len(orthologs[i])-2)
         taxa_completion = len(orthologs[i]["taxa"])/float(len(pairDict))
         edge_count = 0
+        taxa_counter = {}
         for j in orthologs[i]["genes"]:
             edge_count+= orthologs[i]["genes"][j]
+            taxa_counter[j.split("_")[0]] = True
+        taxa_uniq = len(taxa_counter)
         edge_completion =(edge_count/len(orthologs[i]["genes"])/3)
-        if edge_completion > 0.65 and taxa_completion > 0.75:
+        if edge_completion > 0.65 and taxa_completion > 0.75 and taxa_uniq >= len(pairDict):
             print(orthologs[i]["genes"])
     # for i in bestieDict.keys():
     #     print(i,bestieDict[i])
