@@ -1,4 +1,46 @@
 pairDict = {}
+genesUsedDict ={}
+orthologs = {}
+number = 1
+def checkPairs(original_dict,internalDict,value):
+    for j in internalDict.keys():
+
+        if((max(value,j),min(value,j)) not in orthologs[number]):
+
+            if j in original_dict:
+                orthologs[number][(max(value,j),min(value,j))] = True
+
+                checkPairs(original_dict,original_dict[j],j)
+            # else:
+            orthologs[number][(max(value,j),min(value,j))] = True
+            genesUsedDict[j] =True
+            genesUsedDict[value] =True
+
+            # print(value,j)
+            # print(orthologs[number]["genes"])
+            # print(orthologs[number]["taxa"])
+            # print("-----------")
+
+
+
+            if j in orthologs[number]["genes"]:
+
+                orthologs[number]["genes"][j] += 1
+
+            else:
+                orthologs[number]["genes"][j] = 1
+            if value in orthologs[number]["genes"]:
+                orthologs[number]["genes"][value] += 1
+            else:
+                orthologs[number]["genes"][value] = 1
+
+            orthologs[number]["taxa"][j.split("_")[0]] =True
+            orthologs[number]["taxa"][value.split("_")[0]] =True
+
+            # print(value,j)
+
+
+
 with open("Sim_genomes.fasta.blastall") as f:
     for line in f:
         row = line.strip().split()
@@ -31,8 +73,27 @@ with open("Sim_genomes.fasta.blastall") as f:
                             print(bestie, "and",gene,"are BFFs")
                 except:
                     None
-    print(bestieDict)
-    print( bestieDict.keys())
+    # print(bestieDict)
+    # print( bestieDict.keys())
     for i in bestieDict.keys():
-        print(i)
-        print( len(bestieDict[i]))
+        if i not in genesUsedDict:
+
+            orthologs[number] = {}
+            orthologs[number]["genes"] ={}
+
+            orthologs[number]["taxa"] ={}
+            checkPairs(bestieDict,bestieDict[i],i)
+            # print(len(orthologs[number])-1,len(orthologs[number]["genes"]))
+            # print(orthologs[number]["genes"])
+        number+=1
+        # print("@@@@@@@@@@@@@@@@@@@@@@")
+    for i in orthologs.keys():
+        print(orthologs[i]["genes"])
+    # for i in bestieDict.keys():
+    #     print(i,bestieDict[i])
+    # orthologs[number] = {}
+    # orthologs[number]["genes"] ={}
+    #
+    # orthologs[number]["taxa"] ={}
+    # # print("*************")
+    # checkPairs(bestieDict,bestieDict["A1_gene4"],"A1_gene4")
