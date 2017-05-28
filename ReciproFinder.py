@@ -73,16 +73,24 @@ with open("Sim_genomes.fasta.blastall") as f:
                             print(bestie, "and",gene,"are BFFs")
                 except:
                     None
-    # print(bestieDict)
-    # print( bestieDict.keys())
+    print(bestieDict)
+    print( bestieDict.keys())
     for i in bestieDict.keys():
+        print("-------------")
+        print(genesUsedDict)
+        print("===============")
         if i not in genesUsedDict:
+            keep_going = True
+            for j in bestieDict[i].keys():
+                if j in genesUsedDict:
+                    keep_going = False
+            if keep_going:
 
-            orthologs[number] = {}
-            orthologs[number]["genes"] ={}
+                orthologs[number] = {}
+                orthologs[number]["genes"] ={}
 
-            orthologs[number]["taxa"] ={}
-            checkPairs(bestieDict,bestieDict[i],i)
+                orthologs[number]["taxa"] ={}
+                checkPairs(bestieDict,bestieDict[i],i)
             # print(len(orthologs[number])-1,len(orthologs[number]["genes"]))
             # print(orthologs[number]["genes"])
         number+=1
