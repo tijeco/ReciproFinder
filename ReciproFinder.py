@@ -1,4 +1,5 @@
 pairDict = {}
+
 genesUsedDict ={}
 orthologs = {}
 number = 1
@@ -15,18 +16,8 @@ def checkPairs(original_dict,internalDict,value):
             orthologs[number][(max(value,j),min(value,j))] = True
             genesUsedDict[j] =True
             genesUsedDict[value] =True
-
-            # print(value,j)
-            # print(orthologs[number]["genes"])
-            # print(orthologs[number]["taxa"])
-            # print("-----------")
-
-
-
             if j in orthologs[number]["genes"]:
-
                 orthologs[number]["genes"][j] += 1
-
             else:
                 orthologs[number]["genes"][j] = 1
             if value in orthologs[number]["genes"]:
@@ -36,11 +27,6 @@ def checkPairs(original_dict,internalDict,value):
 
             orthologs[number]["taxa"][j.split("_")[0]] =True
             orthologs[number]["taxa"][value.split("_")[0]] =True
-
-            # print(value,j)
-
-
-
 with open("Sim_genomes.fasta.blastall") as f:
     for line in f:
         row = line.strip().split()
@@ -73,24 +59,13 @@ with open("Sim_genomes.fasta.blastall") as f:
                             print(bestie, "and",gene,"are BFFs")
                 except:
                     None
-    # print(bestieDict)
-    # print( bestieDict.keys())
+
     for i in bestieDict.keys():
-        # print("-------------")
-        # print(genesUsedDict)
-        # print("===============")
-        # if i not in genesUsedDict:
-
-
         orthologs[number] = {}
         orthologs[number]["genes"] ={}
-
         orthologs[number]["taxa"] ={}
         checkPairs(bestieDict,bestieDict[i],i)
-            # print(len(orthologs[number])-1,len(orthologs[number]["genes"]))
-            # print(orthologs[number]["genes"])
         number+=1
-        # print("@@@@@@@@@@@@@@@@@@@@@@")
     for i in orthologs.keys():
         # print(len(orthologs[i])-2)
         taxa_completion = len(orthologs[i]["taxa"])/float(len(pairDict))
@@ -101,13 +76,5 @@ with open("Sim_genomes.fasta.blastall") as f:
             taxa_counter[j.split("_")[0]] = True
         taxa_uniq = len(taxa_counter)
         edge_completion =(edge_count/len(orthologs[i]["genes"])/3)
-        if edge_completion > 0.65 and taxa_completion > 0.75 and taxa_uniq >= len(pairDict):
+        if edge_completion > 0.65 and taxa_completion > 0.75 and taxa_uniq == len(pairDict) and len(pairDict) == len(orthologs[i]["genes"]):
             print(orthologs[i]["genes"])
-    # for i in bestieDict.keys():
-    #     print(i,bestieDict[i])
-    # orthologs[number] = {}
-    # orthologs[number]["genes"] ={}
-    #
-    # orthologs[number]["taxa"] ={}
-    # # print("*************")
-    # checkPairs(bestieDict,bestieDict["A1_gene4"],"A1_gene4")
