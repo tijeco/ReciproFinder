@@ -21,8 +21,8 @@ type Pair struct {
 }
 
 func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bool, usedGenes map[string]bool, originalGene string, outputStruct orthoGroup) {
-	fmt.Println(originalGene, "==============================")
-
+	// fmt.Println(originalGene, "==============================")
+	fmt.Println("currently working with the following:", originalGene, subMap)
 	//NOTE originalMap[originalGene] ======>>>>>> subMap, so yeah man that's a thing NOTE NOTE NOTE
 
 	// usedGenes[originalGene] = true
@@ -31,38 +31,58 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 	// 	fmt.Println(false)
 	// usedGenes[newGene] = true
 	for newGene := range subMap {
+		fmt.Println("newGene:", newGene, "originalGene:", originalGene)
+		bestiePair := []string{newGene, originalGene}
+		sort.Strings(bestiePair)
 
-		outputStruct.nodePairs[Pair{newGene, originalGene}] = true
-		taxaList := []string{strings.Split(newGene, "_")[0], strings.Split(originalGene, "_")[0]}
-		for thisTaxa := range taxaList {
-			outputStruct.taxaNodes[taxaList[thisTaxa]] = true
-		} //end taxa loop
-		geneList := []string{originalGene, newGene}
-		// fmt.Println(geneList)
-		// fmt.Println(outputStruct.geneNodes)
-		for currentGene := range geneList {
-			_, ok := outputStruct.geneNodes[geneList[currentGene]]
+		_, putatitivePairs := outputStruct.nodePairs[Pair{bestiePair[0], bestiePair[1]}]
+		if !putatitivePairs {
+
+			// outputStruct.nodePairs[Pair{newGene, originalGene}] = true
+
+			outputStruct.nodePairs[Pair{bestiePair[0], bestiePair[1]}] = true
+
+			taxaList := []string{strings.Split(newGene, "_")[0], strings.Split(originalGene, "_")[0]}
+			for thisTaxa := range taxaList {
+				outputStruct.taxaNodes[taxaList[thisTaxa]] = true
+			} //end taxa loop
+			// geneList := []string{newGene, originalGene}
+			// fmt.Println(geneList)
+			// fmt.Println(outputStruct.geneNodes)
+			// for currentGene := range geneList {
+			_, ok := outputStruct.geneNodes[newGene]
 			if ok {
-				outputStruct.geneNodes[geneList[currentGene]]++
+				outputStruct.geneNodes[newGene]++ //FIXME
+				fmt.Println(newGene, outputStruct.geneNodes[newGene])
 			} else {
-				outputStruct.geneNodes[geneList[currentGene]] = 1
+				outputStruct.geneNodes[newGene] = 1
 			} //end geneNodes comparison
-		} //end gene loop
-		if putatitiveGene, ok := originalMap[newGene]; ok {
-			usedGenes[newGene] = true
-			keysInOriginal(originalMap, putatitiveGene, usedGenes, newGene, outputStruct)
 
-		} // end recursion
+			_, okay := outputStruct.geneNodes[originalGene]
+			if okay {
+				outputStruct.geneNodes[originalGene]++ //FIXME
+				fmt.Println(originalGene, outputStruct.geneNodes[originalGene])
+			} else {
+				outputStruct.geneNodes[originalGene] = 1
+			} //end geneNodes comparison
+			// } //end gene loop
+			if putatitiveGene, ok := originalMap[newGene]; ok {
+				usedGenes[newGene] = true
+				keysInOriginal(originalMap, putatitiveGene, usedGenes, newGene, outputStruct)
+
+			} // end recursion
+		} //end putatitivePairs
+
 	} // end submap loop
-
+	fmt.Println("done with function", originalGene)
 } // end keysInOriginal
 
 func main() {
-	var numTaxa int
+	// var numTaxa int
 	pairMap := make(map[string]map[string]map[string]Pair)
 	// pairMap["A1"] = make(map[string]Pair)
 	// pairMap["A1"]["g1"] = Pair{"g2", 33.4}
-	if file, err := os.Open("Sim_genomes.fasta.blastall"); err == nil {
+	if file, err := os.Open("Sim_genomes.fasta.blastall.big"); err == nil {
 
 		// make sure it gets closed
 		defer file.Close()
@@ -161,6 +181,7 @@ func main() {
 		_, ok := pathTraveled[gene]
 		if !ok {
 			keysInOriginal(bestieMap, bestieMap[gene], pathTraveled, gene, orthologMap[orthologNumber])
+			fmt.Println("new row!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		}
 
 		pathTraveled[gene] = true
