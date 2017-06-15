@@ -22,7 +22,7 @@ type Pair struct {
 
 func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bool, usedGenes map[string]bool, originalGene string, outputStruct orthoGroup) {
 	// fmt.Println(originalGene, "==============================")
-	fmt.Println("currently working with the following:", originalGene, subMap)
+	// fmt.Println("currently working with the following:", originalGene, subMap)
 	//NOTE originalMap[originalGene] ======>>>>>> subMap, so yeah man that's a thing NOTE
 
 	// usedGenes[originalGene] = true
@@ -31,7 +31,7 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 	// 	fmt.Println(false)
 	// usedGenes[newGene] = true
 	for newGene := range subMap {
-		fmt.Println("newGene:", newGene, "originalGene:", originalGene)
+		// fmt.Println("newGene:", newGene, "originalGene:", originalGene)
 		bestiePair := []string{newGene, originalGene}
 		sort.Strings(bestiePair)
 
@@ -53,7 +53,7 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 			_, ok := outputStruct.geneNodes[newGene]
 			if ok {
 				outputStruct.geneNodes[newGene]++ //FIXME
-				fmt.Println(newGene, outputStruct.geneNodes[newGene])
+				// fmt.Println(newGene, outputStruct.geneNodes[newGene])
 			} else {
 				outputStruct.geneNodes[newGene] = 1
 			} //end geneNodes comparison
@@ -61,7 +61,7 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 			_, okay := outputStruct.geneNodes[originalGene]
 			if okay {
 				outputStruct.geneNodes[originalGene]++ //FIXME
-				fmt.Println(originalGene, outputStruct.geneNodes[originalGene])
+				// fmt.Println(originalGene, outputStruct.geneNodes[originalGene])
 			} else {
 				outputStruct.geneNodes[originalGene] = 1
 			} //end geneNodes comparison
@@ -74,11 +74,11 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 		} //end putatitivePairs
 
 	} // end submap loop
-	fmt.Println("done with function", originalGene)
+	// fmt.Println("done with function", originalGene)
 } // end keysInOriginal
 
 func main() {
-	// var numTaxa int
+	var numTaxa int
 	pairMap := make(map[string]map[string]map[string]Pair)
 	// pairMap["A1"] = make(map[string]Pair)
 	// pairMap["A1"]["g1"] = Pair{"g2", 33.4}
@@ -123,6 +123,7 @@ func main() {
 			} // end taxa comparison
 			//NOTE put number of taxa as len(pairDict) here
 		} // end file scan loop
+		numTaxa = len(pairMap)
 
 	} else {
 		log.Fatal(err)
@@ -183,20 +184,23 @@ func main() {
 		_, ok := pathTraveled[gene]
 		if !ok {
 			keysInOriginal(bestieMap, bestieMap[gene], pathTraveled, gene, orthologMap[orthologNumber])
-			fmt.Println("new row!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			// fmt.Println("new row!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		}
 
 		pathTraveled[gene] = true
 		orthologNumber++
 	}
-	fmt.Println("??????????????????????????")
-	for gene, value := range bestieMap {
-		fmt.Println(gene, value)
-
-	}
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", orthologMap)
+	// fmt.Println("??????????????????????????")
+	// for gene, value := range bestieMap {
+	// 	fmt.Println(gene, value)
+	//
+	// }
+	// fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", orthologMap)
 	for num, value := range orthologMap {
-		fmt.Println(num, value.geneNodes)
+		if len(value.taxaNodes) == numTaxa {
+			fmt.Println(num, value.geneNodes)
+		}
+
 	}
 
 	strs := []string{"c", "a"}
