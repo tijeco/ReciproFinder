@@ -23,7 +23,7 @@ type Pair struct {
 func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bool, usedGenes map[string]bool, originalGene string, outputStruct orthoGroup) {
 	// fmt.Println(originalGene, "==============================")
 	fmt.Println("currently working with the following:", originalGene, subMap)
-	//NOTE originalMap[originalGene] ======>>>>>> subMap, so yeah man that's a thing NOTE NOTE NOTE
+	//NOTE originalMap[originalGene] ======>>>>>> subMap, so yeah man that's a thing NOTE NOTE
 
 	// usedGenes[originalGene] = true
 
