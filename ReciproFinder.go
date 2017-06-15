@@ -82,7 +82,9 @@ func main() {
 	pairMap := make(map[string]map[string]map[string]Pair)
 	// pairMap["A1"] = make(map[string]Pair)
 	// pairMap["A1"]["g1"] = Pair{"g2", 33.4}
-	if file, err := os.Open("Sim_genomes.fasta.blastall.big"); err == nil {
+	arg := os.Args[1]
+	// arg := "Sim_genomes.fasta.blastall.big"
+	if file, err := os.Open(arg); err == nil {
 
 		// make sure it gets closed
 		defer file.Close()
