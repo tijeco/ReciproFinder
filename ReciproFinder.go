@@ -11,9 +11,9 @@ import (
 )
 
 type orthoGroup struct {
-	nodePairs map[Pair]bool
-	geneNodes map[string]int
-	taxaNodes map[string]bool
+	nodePairs     map[Pair]bool
+	taxaGeneNodes map[string]map[string]int
+	// taxaNodes map[string]int
 }
 
 type Pair struct {
@@ -42,29 +42,77 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 
 			outputStruct.nodePairs[Pair{bestiePair[0], bestiePair[1]}] = true
 
-			taxaList := []string{strings.Split(newGene, "_")[0], strings.Split(originalGene, "_")[0]}
-			for thisTaxa := range taxaList {
-				outputStruct.taxaNodes[taxaList[thisTaxa]] = true
-			} //end taxa loop
+			// taxaList := []string{strings.Split(newGene, "_")[0], strings.Split(originalGene, "_")[0]}
+			// for thisTaxa := range taxaList {
+			// 	outputStruct.taxaNodes[taxaList[thisTaxa]] = true
+			// } //end taxa loop
 			// geneList := []string{newGene, originalGene}
 			// fmt.Println(geneList)
 			// fmt.Println(outputStruct.geneNodes)
 			// for currentGene := range geneList {
-			_, ok := outputStruct.geneNodes[newGene]
-			if ok {
-				outputStruct.geneNodes[newGene]++ //FIXME
-				// fmt.Println(newGene, outputStruct.geneNodes[newGene])
-			} else {
-				outputStruct.geneNodes[newGene] = 1
-			} //end geneNodes comparison
 
-			_, okay := outputStruct.geneNodes[originalGene]
-			if okay {
-				outputStruct.geneNodes[originalGene]++ //FIXME
-				// fmt.Println(originalGene, outputStruct.geneNodes[originalGene])
+			if putatitiveTaxa, ok := outputStruct.taxaGeneNodes[strings.Split(newGene, "_")[0]]; ok {
+
+				_, putatitiveGene := putatitiveTaxa[newGene]
+				if putatitiveGene {
+					putatitiveTaxa[newGene]++
+				} else {
+					putatitiveTaxa[newGene] = 1
+				}
 			} else {
-				outputStruct.geneNodes[originalGene] = 1
-			} //end geneNodes comparison
+				outputStruct.taxaGeneNodes[strings.Split(newGene, "_")[0]] = map[string]int{newGene: 1}
+			}
+
+			if putatitiveTaxa, ok := outputStruct.taxaGeneNodes[strings.Split(originalGene, "_")[0]]; ok {
+				// fmt.Println(putatitiveTaxa)
+				_, putatitiveGene := putatitiveTaxa[originalGene]
+				if putatitiveGene {
+					putatitiveTaxa[originalGene]++
+				} else {
+					putatitiveTaxa[originalGene] = 1
+				}
+				// putatitiveGene++
+				// putatitiveTaxa[originalGene]++
+				// fmt.Println(putatitiveGene)
+
+			} else {
+				// putatitiveTaxa[originalGene] = 1
+				outputStruct.taxaGeneNodes[strings.Split(originalGene, "_")[0]] = make(map[string]int) //{originalGene: 1}
+				outputStruct.taxaGeneNodes[strings.Split(originalGene, "_")[0]][originalGene] = 1
+			}
+
+			// _, ok := outputStruct.taxaGeneNodes[strings.Split(newGene, "_")[0]]
+			// if ok {
+			// 	outputStruct.geneNodes[newGene]++ //FIXME
+			// 	// fmt.Println(newGene, outputStruct.geneNodes[newGene])
+			//
+			// } else {
+			// 	outputStruct.geneNodes[newGene] = 1
+			// 	_, ok1 := outputStruct.taxaNodes[strings.Split(newGene, "_")[0]]
+			// 	if ok1 {
+			// 		outputStruct.taxaNodes[strings.Split(newGene, "_")[0]]++ //FIXME
+			// 		// fmt.Println(newGene, outputStruct.taxaNodes[newGene])
+			// 	} else {
+			// 		outputStruct.taxaNodes[strings.Split(newGene, "_")[0]] = 1
+			// 	} //end taxaNodes comparison
+			// } //end geneNodes comparison
+			//
+			// _, okay := outputStruct.geneNodes[originalGene]
+			// if okay {
+			// 	outputStruct.geneNodes[originalGene]++ //FIXME
+			//
+			// 	// fmt.Println(originalGene, outputStruct.geneNodes[originalGene])
+			// } else {
+			// 	outputStruct.geneNodes[originalGene] = 1
+			// 	_, okay1 := outputStruct.taxaNodes[strings.Split(originalGene, "_")[0]]
+			// 	if okay1 {
+			// 		outputStruct.taxaNodes[strings.Split(originalGene, "_")[0]]++ //FIXME
+			// 		// fmt.Println(originalGene, outputStruct.taxaNodes[originalGene])
+			// 	} else {
+			// 		outputStruct.taxaNodes[strings.Split(originalGene, "_")[0]] = 1
+			// 	} //end taxaNodes comparison
+			// } //end geneNodes comparison
+
 			// } //end gene loop
 			if putatitiveGene, ok := originalMap[newGene]; ok {
 				usedGenes[newGene] = true
@@ -82,8 +130,8 @@ func main() {
 	pairMap := make(map[string]map[string]map[string]Pair)
 	// pairMap["A1"] = make(map[string]Pair)
 	// pairMap["A1"]["g1"] = Pair{"g2", 33.4}
-	arg := os.Args[1]
-	// arg := "Sim_genomes.fasta.blastall.big"
+	// arg := os.Args[1]
+	arg := "Sim_genomes.fasta.blastall.big"
 	if file, err := os.Open(arg); err == nil {
 
 		// make sure it gets closed
@@ -177,8 +225,8 @@ func main() {
 
 		orthologs := orthoGroup{}
 		orthologs.nodePairs = make(map[Pair]bool)
-		orthologs.geneNodes = make(map[string]int)
-		orthologs.taxaNodes = make(map[string]bool)
+		orthologs.taxaGeneNodes = make(map[string]map[string]int)
+		// orthologs.taxaNodes = make(map[string]int)
 		orthologMap[orthologNumber] = orthologs
 		// fmt.Println(gene, "***********************************")
 		_, ok := pathTraveled[gene]
@@ -190,21 +238,40 @@ func main() {
 		pathTraveled[gene] = true
 		orthologNumber++
 	}
-	// fmt.Println("??????????????????????????")
-	// for gene, value := range bestieMap {
-	// 	fmt.Println(gene, value)
-	//
-	// }
-	// fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", orthologMap)
+
 	for num, value := range orthologMap {
-		if len(value.taxaNodes) == numTaxa {
-			fmt.Println(num, value.geneNodes)
+		if len(value.taxaGeneNodes) == numTaxa {
+			for taxa := range value.taxaGeneNodes {
+				genes := value.taxaGeneNodes[taxa]
+				var winner string
+				var highestNum int
+				for gene, connections := range genes {
+					if len(genes) == 1 {
+						fmt.Println(num, gene)
+					} else {
+						// fmt.Println("+++++++++++++", genes, gene, taxa)
+						if connections > highestNum {
+							winner = gene
+							highestNum = connections
+
+						}
+					}
+
+				}
+				if winner != "" {
+					fmt.Println(num, winner)
+				}
+
+				// if len(gene) == 1 {
+				// 	fmt.Println(taxa, gene, num)
+				// } else {
+				// 	fmt.Println(gene)
+				// }
+				// fmt.Println(num, value.taxaGeneNodes, numTaxa)
+			}
+
 		}
 
 	}
-
-	strs := []string{"c", "a"}
-	sort.Strings(strs)
-	fmt.Println("Strings:", strs[0])
 
 } // end main
