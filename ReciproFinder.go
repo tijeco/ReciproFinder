@@ -69,7 +69,7 @@ func keysInOriginal(originalMap map[string]map[string]bool, subMap map[string]bo
 func main() {
 	var numTaxa int
 	pairMap := make(map[string]map[string]map[string]Pair)
-	arg := os.Args[1]
+	arg := os.Args[1] 
 	// arg := "Sim_genomes.fasta.blastall"
 	if file, err := os.Open(arg); err == nil {
 		// NOTE this opens file
