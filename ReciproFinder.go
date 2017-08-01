@@ -70,9 +70,10 @@ func main() {
 	var numTaxa int
 	pairMap := make(map[string]map[string]map[string]Pair)
 	arg := os.Args[1]
-	// arg := "Sim_genomes.fasta.blastall.big"
+	// arg := "Sim_genomes.fasta.blastall"
 	if file, err := os.Open(arg); err == nil {
-		fmt.Println("opening:", arg)
+		// NOTE this opens file
+		// fmt.Println("opening:", arg)
 
 		// make sure it gets closed
 		defer file.Close()
@@ -114,7 +115,8 @@ func main() {
 	} else {
 		log.Fatal(err)
 	} //end file open
-	fmt.Println("closing:", arg)
+	// NOTE this closes file
+	// fmt.Println("closing:", arg)
 	bestieMap := make(map[string]map[string]bool)
 	for taxa, taxaGene := range pairMap {
 		for gene, geneTaxa := range taxaGene {
@@ -167,7 +169,8 @@ func main() {
 	for num, value := range orthologMap {
 
 		if len(value.taxaGeneNodes) == numTaxa {
-			fmt.Println(num, (float64(len(value.nodePairs))*2.0)/float64(numTaxa) > 0.6*float64(numTaxa-1), value.taxaGeneNodes)
+			// NOTE this is alot of stuff to print
+			// fmt.Println(num, (float64(len(value.nodePairs))*2.0)/float64(numTaxa) > 0.6*float64(numTaxa-1), value.taxaGeneNodes)
 			if (float64(len(value.nodePairs))*2.0)/float64(numTaxa) > 0.6*float64(numTaxa-1) {
 				for taxa := range value.taxaGeneNodes {
 					genes := value.taxaGeneNodes[taxa]
@@ -175,7 +178,8 @@ func main() {
 					var highestNum int
 					for gene, connections := range genes {
 						if len(genes) == 1 {
-							fmt.Println(num, gene, connections)
+							fmt.Println(num, gene)
+							// fmt.Println(num, gene, connections)
 						} else {
 							// fmt.Println("+++++++++++++", genes, gene, taxa)
 							if connections > highestNum {
@@ -185,7 +189,8 @@ func main() {
 						}
 					}
 					if winner != "" {
-						fmt.Println(num, winner, highestNum)
+						fmt.Println(num, winner)
+						// fmt.Println(num, winner, highestNum)
 					}
 				}
 
